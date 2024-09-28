@@ -8,9 +8,11 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 @EnableAsync
 @SpringBootApplication
 @EnableWebSocketMessageBroker  // 开启 WebSocket 消息代理，这样控制器才能处理 WebSocket 消息
-public class ChatApplication {
+public class ChatApplication
+{
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         SpringApplication.run(ChatApplication.class, args);
     }
 

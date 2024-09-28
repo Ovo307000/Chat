@@ -1,7 +1,7 @@
 package org.ovo307000.chat.module.dto;
 
-import org.ovo307000.chat.module.enumeration.UserStatus;
 import org.ovo307000.chat.module.entity.User;
+import org.ovo307000.chat.module.enumeration.UserStatus;
 
 import java.io.Serializable;
 
