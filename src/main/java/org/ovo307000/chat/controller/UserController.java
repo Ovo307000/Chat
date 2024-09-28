@@ -47,7 +47,7 @@ public class UserController
         this.userService.saveUserAsync(user);
 
         // 返回添加的用户
-        return ResponseEntity.ok(new UserDTO(user.getNickName(), user.getFullName(), user.getStatus()));
+        return ResponseEntity.ok(UserDTO.fromUser(user));
     }
 
     /**
@@ -67,7 +67,7 @@ public class UserController
         this.userService.updateStatusToOnlineAsync(user);
 
         // 返回用户详细信息的响应实体
-        return ResponseEntity.ok(new UserDTO(user.getNickName(), user.getFullName(), user.getStatus()));
+        return ResponseEntity.ok(UserDTO.fromUser(user));
     }
 
     /**
@@ -88,7 +88,7 @@ public class UserController
             users = Objects.requireNonNull(this.userService.findConnectedUsers())
                            .get()
                            .stream()
-                           .map(user -> new UserDTO(user.getNickName(), user.getFullName(), user.getStatus()))
+                           .map(UserDTO::fromUser)
                            .toList();
         }
         catch (InterruptedException | ExecutionException e)

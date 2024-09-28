@@ -10,4 +10,8 @@ import java.io.Serializable;
  */
 public record UserDTO(String nickName, String fullName, UserStatus status) implements Serializable
 {
+    public static UserDTO fromUser(final User user)
+    {
+        return new UserDTO(user.getNickName(), user.getFullName(), user.getStatus());
+    }
 }
