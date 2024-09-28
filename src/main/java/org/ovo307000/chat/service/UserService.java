@@ -1,5 +1,6 @@
 package org.ovo307000.chat.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ovo307000.chat.module.entity.User;
 import org.ovo307000.chat.module.enumeration.UserStatus;
@@ -16,14 +17,10 @@ import java.util.concurrent.Future;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserService
 {
     private final UserRepository userRepository;
-
-    public UserService(final UserRepository userRepository)
-    {
-        this.userRepository = userRepository;
-    }
 
     @Transactional
     public void saveUserAsync(@NonNull final User user)
@@ -95,5 +92,36 @@ public class UserService
         log.info("Finding connected users");
 
         return CompletableFuture.supplyAsync(() -> this.userRepository.findByStatus(UserStatus.ONLINE));
+    }
+
+    public void updateStatusToOnlineAsync(final User user)
+    {
+        log.info("Updating user status to online: {}", user.getNickName());
+
+        if (this.isUserExistInDatabase(user))
+        {
+            CompletableFuture.runAsync(() ->
+                                       {
+                                           user.setStatus(UserStatus.ONLINE);
+                                           this.userRepository.save(user);
+
+                                           log.info("User connected successfully and status updated: {}",
+                                                    user.getNickName());
+                                       })
+                             .exceptionally(throwable ->
+                                            {
+                                                log.error("Error occurred while updating user status: {}",
+                                                          user.getNickName(),
+                                                          throwable);
+
+                                                return null;
+                                            });
+        }
+        else
+        {
+            log.error("User does not exist in database: {}", user.getNickName());
+
+            throw new IllegalArgumentException("User does not exist in database");
+        }
     }
 }
