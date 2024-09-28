@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 // 使用日志记录用户操作
 @Slf4j
@@ -78,27 +76,24 @@ public class UserController
     @GetMapping("/all")
     public ResponseEntity<List<UserDTO>> getAllUsers()
     {
-        // 定义变量用于存储所有用户信息
-        final List<UserDTO> users;
+        // 异步获取所有连接用户的用户信息，并处理可能的异常
+        final var userListFuture = this.userService.findConnectedUsersAsync()
+                                                   .thenApply(userList -> userList.stream()
+                                                                                  .map(UserDTO::fromUser)
+                                                                                  .toList())
+                                                   .exceptionally(e ->
+                                                                  {
+                                                                      // 当获取连接用户信息时发生错误，记录错误信息
+                                                                      log.error(
+                                                                              "Error occurred while finding connected users",
+                                                                              e);
 
-        // 尝试块，用于处理执行过程中可能抛出的异常
-        try
-        {
-            // 调用用户服务获取所有连接的用户，并处理可能抛出的异常
-            users = Objects.requireNonNull(this.userService.findConnectedUsers())
-                           .get()
-                           .stream()
-                           .map(UserDTO::fromUser)
-                           .toList();
-        }
-        catch (InterruptedException | ExecutionException e)
-        {
-            // 当捕获到异常时，记录错误日志并抛出运行时异常
-            log.error("Error occurred while finding connected users", e);
-            throw new RuntimeException(e);
-        }
+                                                                      // 抛出运行时异常，传递错误信息
+                                                                      throw new RuntimeException(e);
+                                                                  });
 
         // 返回包含所有用户信息的响应实体
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(userListFuture.join());
     }
+
 }

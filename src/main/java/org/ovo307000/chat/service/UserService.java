@@ -6,14 +6,12 @@ import org.ovo307000.chat.module.entity.User;
 import org.ovo307000.chat.module.enumeration.UserStatus;
 import org.ovo307000.chat.repository.UserRepository;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 /**
  * 用户服务类
@@ -123,7 +121,7 @@ public class UserService
      *
      * @return 包含在线用户列表的 Future 对象，如果用户不存在则为 null
      */
-    public @Nullable Future<List<User>> findConnectedUsers()
+    public CompletableFuture<List<User>> findConnectedUsersAsync()
     {
         log.info("Finding connected users");
 
