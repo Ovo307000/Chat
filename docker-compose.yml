@@ -14,14 +14,12 @@
 # restart：重启策略，当容器退出时的重启策略，可选值为 no、always、on-failure、unless-stopped
 # environment：环境变量，设置容器的环境变量，格式为 KEY:VALUE
 
-version: "1.1" # 定义 Compose 文件的版本，这里是 1.0
-
 services: # 定义了应用的各个服务
 
   # mongodb 是一个 NoSQL 数据库，这里使用的是官方的 MongoDB 镜像
   mongodb:
-    image: mongo:latest                     # 使用的镜像，这里是 mongo:latest，即最新版本
-    container_name: mongodb                 # 容器名，可以自定义，但是要保证唯一
+    image: mongo:4.0.4                      # 使用的镜像，这里是 mongo:latest，即最新版本
+    container_name: mongo                   # 容器名，可以自定义，但是要保证唯一
     ports: [ "27017:27017" ]                # 端口映射，将容器的 27017 端口映射到宿主机的 27017 端口
     volumes: [ "/data/mongodb:/data/db" ]   # 数据卷，将容器的 /data/db 目录挂载到宿主机的 /data/mongodb 目录
     restart: unless-stopped                 # 除非手动停止，否则如果容器退出，就会自动重启
@@ -33,12 +31,13 @@ services: # 定义了应用的各个服务
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-express
-    ports: [ "8081:8081" ]
+    depends_on: [ mongodb ]  # 定义了依赖关系，即 mongo-express 依赖于 mongodb，只有当 mongodb 启动后，mongo-express 才会启动
+    ports: [ "8081:12309" ]
     restart: unless-stopped
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
-      ME_CONFIG_MONGODB_SERVER: mongodb  # 你希望连接的数据库的主机名，这里是 mongodb，即上面定义的服务名
+      ME_CONFIG_MONGODB_SERVER: mongo  # 你希望连接的数据库的主机名，这里是 mongo，即上面定义的服务名
 
 volumes:
   mongodb: { } # 定义一个数据卷，用于存储 MongoDB 数据库的数据
