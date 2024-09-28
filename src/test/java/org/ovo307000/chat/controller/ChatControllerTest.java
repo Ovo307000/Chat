@@ -8,10 +8,12 @@ import org.mockito.MockitoAnnotations;
 import org.ovo307000.chat.module.dto.ChatNotificationDTO;
 import org.ovo307000.chat.module.entity.ChatMessage;
 import org.ovo307000.chat.service.ChatMessageService;
+import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,10 +67,10 @@ class ChatControllerTest
 
         // 验证结果
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(2,
-                     response.getBody()
-                             .size());
+                     Objects.requireNonNull(response.getBody())
+                            .size());
         assertEquals("Hello",
                      response.getBody()
                              .get(0)
