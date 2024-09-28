@@ -48,9 +48,9 @@ public class ChatMessageService
     /**
      * 异步获取两个用户之间的聊天消息。
      *
-     * @param senderId 发送者的唯一标识，不能为空。
+     * @param senderId   发送者的唯一标识，不能为空。
      * @param receiverId 接收者的唯一标识，不能为空。
-     * @return CompletableFuture<List<ChatMessage>> 消息列表的异步结果。
+     * @return CompletableFuture<List < ChatMessage>> 消息列表的异步结果。
      * @throws IllegalArgumentException 如果找不到对应的聊天室。
      */
     public CompletableFuture<List<ChatMessage>> fetchChatMessagesAsync(@NonNull final String senderId,

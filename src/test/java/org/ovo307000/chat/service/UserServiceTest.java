@@ -10,9 +10,7 @@ import org.ovo307000.chat.module.enumeration.UserStatus;
 import org.ovo307000.chat.repository.UserRepository;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

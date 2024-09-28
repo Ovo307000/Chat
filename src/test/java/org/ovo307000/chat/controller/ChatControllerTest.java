@@ -5,16 +5,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.ovo307000.chat.module.dto.ChatMessageDTO;
 import org.ovo307000.chat.module.dto.ChatNotificationDTO;
 import org.ovo307000.chat.module.entity.ChatMessage;
 import org.ovo307000.chat.service.ChatMessageService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,12 +48,12 @@ class ChatControllerTest
                                                      "Hello",
                                                      LocalDateTime.now()),
                                      new ChatMessage("2",
-                                                                   "chatRoom1",
-                                                                   receiverId,
-                                                                   senderId,
-                                                                   "Hi",
-                                                                   LocalDateTime.now()
-                                                                                .plusMinutes(1)));
+                                                     "chatRoom1",
+                                                     receiverId,
+                                                     senderId,
+                                                     "Hi",
+                                                     LocalDateTime.now()
+                                                                  .plusMinutes(1)));
 
         // 模拟服务方法
         when(this.chatMessageService.fetchChatMessagesAsync(senderId,
@@ -93,7 +90,8 @@ class ChatControllerTest
         var receiverId = "receiver1";
 
         // 模拟服务方法抛出异常
-        when(this.chatMessageService.fetchChatMessagesAsync(senderId, receiverId)).thenReturn(CompletableFuture.failedFuture(
+        when(this.chatMessageService.fetchChatMessagesAsync(senderId,
+                                                            receiverId)).thenReturn(CompletableFuture.failedFuture(
                 new RuntimeException("Test exception")));
 
         // 执行测试并验证异常

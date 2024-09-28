@@ -46,7 +46,6 @@ function connect(event) {
 }
 
 
-
 /**
  * 当用户连接成功时调用的函数
  *

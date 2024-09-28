@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/main.css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="css/main.css" rel="stylesheet">
     <title>Chat Application</title>
 </head>
 <body>
@@ -14,10 +14,10 @@
     <h2>Enter Chatroom</h2>
     <form id="usernameForm">
         <label for="nickname">Nickname:</label>
-        <input type="text" id="nickname" name="nickname" required>
+        <input id="nickname" name="nickname" required type="text">
 
         <label for="fullname">Real Name:</label>
-        <input type="text" id="fullname" name="realname" required>
+        <input id="fullname" name="realname" required type="text">
 
         <button type="submit">Enter Chatroom</button>
     </form>
@@ -40,10 +40,10 @@
         <div class="chat-area" id="chat-messages">
         </div>
 
-        <form id="messageForm" name="messageForm" class="hidden">
+        <form class="hidden" id="messageForm" name="messageForm">
             <div class="message-input">
                 <label for="message">
-                    <input autocomplete="off" type="text" id="message" placeholder="Type your message...">
+                    <input autocomplete="off" id="message" placeholder="Type your message..." type="text">
                 </label>
                 <button>Send</button>
             </div>
