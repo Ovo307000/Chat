@@ -15,6 +15,14 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
+/**
+ * 用户服务类
+ *
+ * <p>
+ * 该服务类提供了对用户相关的操作，包括保存用户，更新用户状态，检查用户是否存在以及查找在线用户
+ * 使用了Lombok的@Slf4j和@RequiredArgsConstructor注解，分别用于日志记录和自动注入 UserRepository
+ * </p>
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -22,6 +30,15 @@ public class UserService
 {
     private final UserRepository userRepository;
 
+    /**
+     * 异步保存用户
+     *
+     * <p>
+     * 该方法用于异步保存用户到数据库中，首先设置用户状态为在线，然后使用 CompletableFuture 异步执行保存操作
+     * </p>
+     *
+     * @param user 需要保存的用户对象，不能为空
+     */
     @Transactional
     public void saveUserAsync(@NonNull final User user)
     {
@@ -33,6 +50,16 @@ public class UserService
                          .thenAcceptAsync(u -> log.info("User saved: {}", user.getNickName()));
     }
 
+    /**
+     * 异步更新用户状态为离线
+     *
+     * <p>
+     * 该方法用于异步更新用户状态为离线，如果用户存在于数据库中，则更新其状态为离线
+     * 如果用户不存在，则抛出 IllegalArgumentException 异常
+     * </p>
+     *
+     * @param user 需要更新状态的用户对象，不能为空
+     */
     @Transactional
     public void updateStatusToOfflineAsync(@NonNull final User user)
     {
@@ -59,7 +86,7 @@ public class UserService
         }
         else
         {
-            log.error("User does not exist in database: {}", user.getNickName());
+            log.error("User not in database: {}", user.getNickName());
 
             throw new IllegalArgumentException("User does not exist in database");
         }
@@ -87,6 +114,15 @@ public class UserService
                                   .isPresent();
     }
 
+    /**
+     * 查找在线用户
+     *
+     * <p>
+     * 该方法用于异步查找所有在线用户，返回一个包含在线用户的 Future 对象
+     * </p>
+     *
+     * @return 包含在线用户列表的 Future 对象，如果用户不存在则为 null
+     */
     public @Nullable Future<List<User>> findConnectedUsers()
     {
         log.info("Finding connected users");
@@ -94,6 +130,16 @@ public class UserService
         return CompletableFuture.supplyAsync(() -> this.userRepository.findByStatus(UserStatus.ONLINE));
     }
 
+    /**
+     * 异步更新用户状态为在线
+     *
+     * <p>
+     * 该方法用于异步更新用户状态为在线，如果用户存在于数据库中，则更新其状态为在线
+     * 如果用户不存在，则抛出 IllegalArgumentException 异常
+     * </p>
+     *
+     * @param user 需要更新状态的用户对象
+     */
     public void updateStatusToOnlineAsync(final User user)
     {
         log.info("Updating user status to online: {}", user.getNickName());

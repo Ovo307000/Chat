@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * 聊天室服务类，用于处理聊天室相关的业务逻辑
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
