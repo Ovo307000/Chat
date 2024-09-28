@@ -12,5 +12,11 @@ import java.util.List;
 @Component
 public interface ChatMessageRepository extends MongoRepository<ChatMessage, String>
 {
+    /**
+     * 根据聊天室ID查询聊天消息列表
+     *
+     * @param chatRoomId 聊天室ID，用于定位特定聊天室的聊天消息
+     * @return 与指定聊天室ID相关的聊天消息列表
+     */
     List<ChatMessage> findByChatRoomId(String chatRoomId);
 }

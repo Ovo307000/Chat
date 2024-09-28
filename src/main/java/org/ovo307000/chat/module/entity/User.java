@@ -13,9 +13,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @RequiredArgsConstructor
 public class User
 {
+    /* 用户昵称 */
     @Id
     private String     nickName;
+
+    /* 用户全名 */
     private String     fullName;
+
+    /* 用户密码 */
     private String     password;
+
+    /* 用户状态 */
     private UserStatus status;
 }
