@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 // 使用日志记录用户操作
 @Slf4j
@@ -77,11 +78,12 @@ public class UserController
     public ResponseEntity<List<UserDTO>> getAllUsers()
     {
         // 异步获取所有连接用户的用户信息，并处理可能的异常
-        final var userListFuture = this.userService.findConnectedUsersAsync()
-                                                   .thenApply(userList -> userList.stream()
+        final CompletableFuture<List<UserDTO>> userListFuture;
+        userListFuture = this.userService.findConnectedUsersAsync()
+                                         .thenApply(userList -> userList.stream()
                                                                                   .map(UserDTO::fromUser)
                                                                                   .toList())
-                                                   .exceptionally(e ->
+                                         .exceptionally(e ->
                                                                   {
                                                                       // 当获取连接用户信息时发生错误，记录错误信息
                                                                       log.error(
