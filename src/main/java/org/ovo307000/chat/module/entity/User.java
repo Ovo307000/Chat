@@ -1,9 +1,9 @@
-package org.ovo307000.chat.module;
+package org.ovo307000.chat.module.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.ovo307000.chat.enumration.UserStatus;
+import org.ovo307000.chat.module.enumeration.UserStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

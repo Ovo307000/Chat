@@ -1,4 +1,4 @@
-package org.ovo307000.chat.enumration;
+package org.ovo307000.chat.module.enumeration;
 
 public enum UserStatus
 {
