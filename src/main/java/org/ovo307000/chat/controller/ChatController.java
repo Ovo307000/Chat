@@ -35,7 +35,7 @@ public class ChatController
     /**
      * 根据发送者和接收者的ID异步获取聊天消息。
      *
-     * @param senderId 发送者的唯一标识符。
+     * @param senderId   发送者的唯一标识符。
      * @param receiverId 接收者的唯一标识符。
      * @return 包含聊天消息的响应实体。
      */
@@ -63,11 +63,25 @@ public class ChatController
     {
         log.info("Processing chat message by {} to {}", chatMessage.getSenderId(), chatMessage.getReceiverId());
 
-        // 异步保存聊天消息到数据库
-        this.chatMessageService.saveChatMessageAsync(chatMessage);
-        // 将消息转换为ChatNotificationDTO并发送给接收者
-        this.brokerMessagingTemplate.convertAndSendToUser(chatMessage.getReceiverId(),
-                                                          "/queue/messages",
-                                                          ChatNotificationDTO.fromChatMessage(chatMessage));
+        try
+        {
+            // 异步保存聊天消息到数据库
+            this.chatMessageService.saveChatMessageAsync(chatMessage)
+                                   .exceptionally(ex ->
+                                                  {
+                                                      log.error("Failed to save chat message", ex);
+                                                      return null;
+                                                  });
+
+            // 将消息转换为ChatNotificationDTO并发送给接收者
+            this.brokerMessagingTemplate.convertAndSendToUser(chatMessage.getReceiverId(),
+                                                              "/queue/messages",
+                                                              ChatNotificationDTO.fromChatMessage(chatMessage));
+            log.info("Chat message sent to user {}", chatMessage.getReceiverId());
+        }
+        catch (Exception e)
+        {
+            log.error("Error processing chat message", e);
+        }
     }
 }
