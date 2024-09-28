@@ -19,7 +19,7 @@ public class ChatMessage
     private String id;
 
     /* 聊天室 ID */
-    private String chatId;
+    private String chatRoomId;
 
     /* 发送者 ID */
     private String senderId;
